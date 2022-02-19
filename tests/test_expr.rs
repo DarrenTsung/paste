@@ -162,10 +162,10 @@ fn test_env_to_snake() {
 }
 
 #[test]
-fn test_env_to_camel() {
+fn test_env_to_pascal() {
     paste! {
         #[allow(non_upper_case_globals)]
-        const [<LIB env!("CARGO_PKG_NAME"):camel>]: &str = "libpaste";
+        const [<LIB env!("CARGO_PKG_NAME"):pascal>]: &str = "libpaste";
 
         let _ = LIBPaste;
     }

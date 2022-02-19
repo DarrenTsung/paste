@@ -198,9 +198,32 @@ pub(crate) fn paste(segments: &[Segment]) -> Result<String> {
                         }
                         evaluated.push(acc.to_lowercase());
                     }
-                    "camel" => {
+                    "pascal" => {
                         let mut acc = String::new();
                         let mut prev = '_';
+                        for ch in last.chars() {
+                            if ch != '_' {
+                                if prev == '_' {
+                                    for chu in ch.to_uppercase() {
+                                        acc.push(chu);
+                                    }
+                                } else if prev.is_uppercase() {
+                                    for chl in ch.to_lowercase() {
+                                        acc.push(chl);
+                                    }
+                                } else {
+                                    acc.push(ch);
+                                }
+                            }
+                            prev = ch;
+                        }
+                        evaluated.push(acc);
+                    }
+                    "camel" => {
+                        // Set previous to an uppercase character so that the first character will
+                        // be lowercase -> leads to camelCase result.
+                        let mut acc = String::new();
+                        let mut prev = 'Z';
                         for ch in last.chars() {
                             if ch != '_' {
                                 if prev == '_' {
@@ -238,7 +261,7 @@ pub(crate) fn paste(segments: &[Segment]) -> Result<String> {
     Ok(pasted)
 }
 
-// Apply some transformation on the first character of the input string. 
+// Apply some transformation on the first character of the input string.
 // The resulting characters replace the first character.
 fn transform_first_char<I>(input: &str, transform: impl Fn(char) -> I) -> String
 where
